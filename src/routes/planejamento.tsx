@@ -46,7 +46,9 @@ function Planejamento() {
     update((d) => ({
       ...d,
       isSample: false,
-      baby: { ...d.baby, dueDate: form.dueDate || undefined },
+      baby: form.dueDate
+        ? { ...d.baby, dueDate: form.dueDate }
+        : (({ dueDate: _drop, ...rest }) => rest)(d.baby),
       financial: {
         ...d.financial,
         monthlySaving: Number(form.monthlySaving) || 0,
