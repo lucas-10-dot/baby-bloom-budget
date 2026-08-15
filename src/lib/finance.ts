@@ -25,8 +25,8 @@ export const previousMonthKey = () => {
 };
 
 export const monthLabel = (key: string) => {
-  const [y, m] = key.split("-").map(Number);
-  return new Date(y, (m ?? 1) - 1, 1)
+  const [ys, ms] = key.split("-");
+  return new Date(Number(ys), Number(ms ?? 1) - 1, 1)
     .toLocaleDateString("pt-BR", { month: "short" })
     .replace(".", "");
 };
