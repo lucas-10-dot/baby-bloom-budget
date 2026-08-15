@@ -4,6 +4,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Fontes carregadas via <link> em src/routes/__root.tsx */
+
 /*
  * Design system definition.
  *
