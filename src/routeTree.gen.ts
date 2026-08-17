@@ -10,11 +10,35 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AntesDeComprarRouteImport } from './routes/antes-de-comprar'
+import { Route as EnxovalRouteImport } from './routes/enxoval'
+import { Route as GastosRouteImport } from './routes/gastos'
+import { Route as MetasRouteImport } from './routes/metas'
 import { Route as PlanejamentoRouteImport } from './routes/planejamento'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AntesDeComprarRoute = AntesDeComprarRouteImport.update({
+  id: '/antes-de-comprar',
+  path: '/antes-de-comprar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnxovalRoute = EnxovalRouteImport.update({
+  id: '/enxoval',
+  path: '/enxoval',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GastosRoute = GastosRouteImport.update({
+  id: '/gastos',
+  path: '/gastos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MetasRoute = MetasRouteImport.update({
+  id: '/metas',
+  path: '/metas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlanejamentoRoute = PlanejamentoRouteImport.update({
@@ -25,27 +49,62 @@ const PlanejamentoRoute = PlanejamentoRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/antes-de-comprar': typeof AntesDeComprarRoute
+  '/enxoval': typeof EnxovalRoute
+  '/gastos': typeof GastosRoute
+  '/metas': typeof MetasRoute
   '/planejamento': typeof PlanejamentoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/antes-de-comprar': typeof AntesDeComprarRoute
+  '/enxoval': typeof EnxovalRoute
+  '/gastos': typeof GastosRoute
+  '/metas': typeof MetasRoute
   '/planejamento': typeof PlanejamentoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/antes-de-comprar': typeof AntesDeComprarRoute
+  '/enxoval': typeof EnxovalRoute
+  '/gastos': typeof GastosRoute
+  '/metas': typeof MetasRoute
   '/planejamento': typeof PlanejamentoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/planejamento'
+  fullPaths:
+    | '/'
+    | '/antes-de-comprar'
+    | '/enxoval'
+    | '/gastos'
+    | '/metas'
+    | '/planejamento'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/planejamento'
-  id: '__root__' | '/' | '/planejamento'
+  to:
+    | '/'
+    | '/antes-de-comprar'
+    | '/enxoval'
+    | '/gastos'
+    | '/metas'
+    | '/planejamento'
+  id:
+    | '__root__'
+    | '/'
+    | '/antes-de-comprar'
+    | '/enxoval'
+    | '/gastos'
+    | '/metas'
+    | '/planejamento'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AntesDeComprarRoute: typeof AntesDeComprarRoute
+  EnxovalRoute: typeof EnxovalRoute
+  GastosRoute: typeof GastosRoute
+  MetasRoute: typeof MetasRoute
   PlanejamentoRoute: typeof PlanejamentoRoute
 }
 
@@ -56,6 +115,34 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/antes-de-comprar': {
+      id: '/antes-de-comprar'
+      path: '/antes-de-comprar'
+      fullPath: '/antes-de-comprar'
+      preLoaderRoute: typeof AntesDeComprarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/enxoval': {
+      id: '/enxoval'
+      path: '/enxoval'
+      fullPath: '/enxoval'
+      preLoaderRoute: typeof EnxovalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gastos': {
+      id: '/gastos'
+      path: '/gastos'
+      fullPath: '/gastos'
+      preLoaderRoute: typeof GastosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/metas': {
+      id: '/metas'
+      path: '/metas'
+      fullPath: '/metas'
+      preLoaderRoute: typeof MetasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/planejamento': {
@@ -70,6 +157,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AntesDeComprarRoute: AntesDeComprarRoute,
+  EnxovalRoute: EnxovalRoute,
+  GastosRoute: GastosRoute,
+  MetasRoute: MetasRoute,
   PlanejamentoRoute: PlanejamentoRoute,
 }
 export const routeTree = rootRouteImport
