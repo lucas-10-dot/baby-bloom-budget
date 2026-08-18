@@ -16,7 +16,8 @@ export const objectives: {
 ];
 
 export function objectiveInfo(box: SavingsBox) {
-  const found = objectives.find((o) => o.value === box.objective) ?? objectives[6];
+  const fallback = { value: "outro" as BoxObjective, emoji: "✨", label: "Outro objetivo" };
+  const found = objectives.find((o) => o.value === box.objective) ?? fallback;
   return {
     emoji: found.emoji,
     label:

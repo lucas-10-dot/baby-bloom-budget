@@ -26,6 +26,8 @@ export const emptyData = (): AppData => ({
   expenses: [],
   layette: [],
   analyses: [],
+  boxes: [],
+  deposits: [],
 });
 
 export const sampleData = (): AppData => {
