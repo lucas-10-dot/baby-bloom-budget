@@ -111,7 +111,7 @@ function Dashboard() {
         />
       </div>
 
-      <section className="mt-6 rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-soft)] sm:p-6">
+      <section className="mt-6 card-premium p-5 sm:p-6">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
           <div className="min-w-0">
             <h2 className="text-lg font-semibold text-foreground">
@@ -166,7 +166,7 @@ function Dashboard() {
       </section>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
-        <section className="rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-soft)] sm:p-6">
+        <section className="card-premium p-5 sm:p-6">
           <h2 className="text-lg font-semibold text-foreground">Próximos passos</h2>
           <ul className="mt-4 flex flex-col gap-3">
             {steps.map((step) => (

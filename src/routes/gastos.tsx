@@ -116,7 +116,7 @@ function Gastos() {
       </div>
 
       {byCategory.length > 0 ? (
-        <section className="mt-4 rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-soft)] sm:p-6">
+        <section className="mt-4 card-premium p-5 sm:p-6">
           <h2 className="text-lg font-semibold text-foreground">
             Onde o dinheiro foi este mês
           </h2>

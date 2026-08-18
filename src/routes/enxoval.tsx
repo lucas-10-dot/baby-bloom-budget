@@ -115,7 +115,7 @@ function Enxoval() {
         />
       </div>
 
-      <div className="mt-5 rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-soft)]">
+      <div className="mt-5 card-premium p-5">
         <p className="text-sm text-muted-foreground">
           Sua lista usa aproximadamente {Math.round(percentUsed)}% do orçamento do enxoval.
         </p>
