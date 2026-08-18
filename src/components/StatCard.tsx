@@ -2,11 +2,11 @@ import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 const tones = {
-  neutral: "bg-card",
-  primary: "bg-primary-soft/60",
-  success: "bg-success-soft",
-  warning: "bg-warning-soft",
-  info: "bg-info-soft",
+  neutral: "",
+  primary: "bg-[linear-gradient(160deg,var(--color-card),color-mix(in_oklab,var(--color-primary-soft)_55%,var(--color-card)))]",
+  success: "bg-[linear-gradient(160deg,var(--color-card),color-mix(in_oklab,var(--color-success-soft)_60%,var(--color-card)))]",
+  warning: "bg-[linear-gradient(160deg,var(--color-card),color-mix(in_oklab,var(--color-warning-soft)_60%,var(--color-card)))]",
+  info: "bg-[linear-gradient(160deg,var(--color-card),color-mix(in_oklab,var(--color-info-soft)_60%,var(--color-card)))]",
 } as const;
 
 export function StatCard({
@@ -23,17 +23,19 @@ export function StatCard({
   icon?: ReactNode;
 }) {
   return (
-    <div
-      className={cn(
-        "rounded-3xl border border-border p-5 shadow-[var(--shadow-soft)]",
-        tones[tone],
-      )}
-    >
+    <div className={cn("card-premium hover-lift group relative overflow-hidden p-5", tones[tone])}>
+      <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[image:var(--gradient-gold)] opacity-60" />
       <div className="flex items-start justify-between gap-3">
-        <p className="text-sm font-medium text-muted-foreground">{label}</p>
-        {icon ? <span className="shrink-0 text-primary">{icon}</span> : null}
+        <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+          {label}
+        </p>
+        {icon ? (
+          <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-card/70 text-primary shadow-[var(--shadow-soft)] transition-transform duration-300 group-hover:scale-105">
+            {icon}
+          </span>
+        ) : null}
       </div>
-      <p className="mt-3 font-display text-2xl font-semibold text-foreground sm:text-[28px]">
+      <p className="mt-3 font-display text-2xl font-semibold tracking-tight text-foreground tabular-nums sm:text-[30px]">
         {value}
       </p>
       {hint ? (
@@ -42,3 +44,4 @@ export function StatCard({
     </div>
   );
 }
+

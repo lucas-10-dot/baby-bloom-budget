@@ -94,7 +94,7 @@ function Metas() {
               return (
                 <li
                   key={goal.id}
-                  className="rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-soft)]"
+                  className="card-premium p-5"
                 >
                   <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
                     <div className="min-w-0">

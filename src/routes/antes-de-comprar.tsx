@@ -90,7 +90,7 @@ function AntesDeComprar() {
     >
       <form
         onSubmit={submit}
-        className="rounded-3xl border border-border bg-card p-5 shadow-[var(--shadow-soft)] sm:p-6"
+        className="card-premium p-5 sm:p-6"
       >
         <div className="grid gap-5 sm:grid-cols-2">
           <div className="flex flex-col gap-2">
