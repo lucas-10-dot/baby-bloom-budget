@@ -34,18 +34,18 @@ export function AppShell({
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
-    <div className="min-h-screen bg-background">
-      <aside className="fixed inset-y-0 left-0 hidden w-72 flex-col border-r border-sidebar-border bg-sidebar px-5 py-8 lg:flex">
+    <div className="min-h-screen">
+      <aside className="fixed inset-y-0 left-0 hidden w-72 flex-col border-r border-sidebar-border bg-sidebar/80 px-5 py-8 backdrop-blur-xl lg:flex">
         <div className="flex items-center gap-3 px-2">
-          <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-primary text-primary-foreground">
+          <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-lift)]">
             <Baby className="size-5" />
           </span>
           <div className="min-w-0">
             <p className="font-display text-lg leading-tight font-semibold text-sidebar-foreground">
               Ninho Financeiro
             </p>
-            <p className="truncate text-xs text-muted-foreground">
-              O dinheiro da sua família, organizado
+            <p className="truncate text-[11px] font-medium tracking-wider text-muted-foreground uppercase">
+              Finanças da família
             </p>
           </div>
         </div>
@@ -58,53 +58,63 @@ export function AppShell({
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-colors",
+                  "group relative flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all duration-300",
                   active
-                    ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                    : "text-muted-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-foreground",
+                    ? "bg-card text-sidebar-accent-foreground shadow-[var(--shadow-soft)]"
+                    : "text-muted-foreground hover:bg-sidebar-accent/40 hover:text-sidebar-foreground",
                 )}
               >
-                <item.icon className="size-5 shrink-0" />
+                {active ? (
+                  <span className="absolute top-1/2 left-0 h-6 w-1 -translate-y-1/2 rounded-r-full bg-[image:var(--gradient-gold)]" />
+                ) : null}
+                <item.icon
+                  className={cn(
+                    "size-5 shrink-0 transition-colors",
+                    active ? "text-primary" : "group-hover:text-primary",
+                  )}
+                />
                 <span className="truncate">{item.label}</span>
               </Link>
             );
           })}
         </nav>
 
-        <div className="mt-auto rounded-3xl bg-primary-soft/60 p-4 text-xs leading-relaxed text-secondary-foreground">
+        <div className="card-premium mt-auto p-4 text-xs leading-relaxed text-muted-foreground">
           Este app ajuda você a organizar seu dinheiro. Ele não substitui
           orientação financeira profissional.
         </div>
       </aside>
 
       <div className="lg:pl-72">
-        <header className="border-b border-border bg-[image:var(--gradient-calm)]">
-          <div className="mx-auto grid max-w-5xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 pt-8 pb-8 sm:px-8">
+        <header className="relative overflow-hidden border-b border-border bg-[image:var(--gradient-calm)]">
+          <span className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-[image:var(--gradient-gold)] opacity-70" />
+          <span className="pointer-events-none absolute -top-24 -right-16 size-64 rounded-full bg-primary-soft/50 blur-3xl" />
+          <div className="relative mx-auto grid max-w-5xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 pt-10 pb-10 sm:px-8">
             <div className="min-w-0">
-              <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase lg:hidden">
+              <p className="text-[11px] font-semibold tracking-[0.2em] text-muted-foreground uppercase lg:hidden">
                 Ninho Financeiro
               </p>
-              <h1 className="mt-1 font-display text-2xl font-semibold text-foreground sm:text-3xl">
+              <h1 className="mt-1 font-display text-[26px] leading-tight font-semibold tracking-tight text-foreground sm:text-4xl">
                 {title}
               </h1>
               {subtitle ? (
-                <p className="mt-2 max-w-xl text-sm text-muted-foreground sm:text-base">
+                <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
                   {subtitle}
                 </p>
               ) : null}
             </div>
-            <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-card text-primary shadow-[var(--shadow-soft)] lg:hidden">
+            <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-lift)] lg:hidden">
               <Baby className="size-5" />
             </span>
           </div>
         </header>
 
-        <main className="mx-auto max-w-5xl px-5 pt-6 pb-28 sm:px-8 lg:pb-16">
+        <main className="mx-auto max-w-5xl px-5 pt-8 pb-28 sm:px-8 lg:pb-16">
           {children}
         </main>
       </div>
 
-      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 backdrop-blur lg:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/85 backdrop-blur-xl lg:hidden">
         <div className="mx-auto grid max-w-lg grid-cols-5">
           {mobileNav.map((item) => {
             const active = pathname === item.to;
@@ -119,8 +129,9 @@ export function AppShell({
               >
                 <span
                   className={cn(
-                    "grid size-9 place-items-center rounded-xl transition-colors",
-                    active && "bg-primary-soft",
+                    "grid size-9 place-items-center rounded-xl transition-all duration-300",
+                    active &&
+                      "bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-lift)]",
                   )}
                 >
                   <item.icon className="size-5" />
@@ -134,3 +145,4 @@ export function AppShell({
     </div>
   );
 }
+
