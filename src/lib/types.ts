@@ -85,6 +85,39 @@ export interface PurchaseAnalysis {
   createdAt: string;
 }
 
+export type BoxObjective =
+  | "futuro_bebe"
+  | "educacao"
+  | "emergencias"
+  | "aniversario"
+  | "primeiro_carro"
+  | "futuro"
+  | "outro";
+
+/** Caixinha do Futuro — organizador de metas. Nenhum dinheiro real é movimentado. */
+export interface SavingsBox {
+  id: string;
+  childName: string;
+  childBirthDate?: string; // ISO date
+  objective: BoxObjective;
+  customObjective?: string;
+  initialAmount: number; // valor informado na criação
+  target: number;
+  monthlyContribution: number;
+  targetDate?: string; // ISO date
+  createdAt: string;
+  milestonesSeen: number[]; // 25 | 50 | 75 | 100
+}
+
+export interface BoxDeposit {
+  id: string;
+  boxId: string;
+  amount: number;
+  date: string; // ISO date
+  note?: string;
+  createdAt: string;
+}
+
 export interface AppData {
   isSample: boolean;
   baby: BabyProfile;
@@ -93,4 +126,7 @@ export interface AppData {
   expenses: Expense[];
   layette: LayetteItem[];
   analyses: PurchaseAnalysis[];
+  boxes: SavingsBox[];
+  deposits: BoxDeposit[];
 }
+
