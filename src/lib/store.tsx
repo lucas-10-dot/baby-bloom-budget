@@ -54,8 +54,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) setData(JSON.parse(raw) as AppData);
-      else setData(sampleData());
+      if (raw) {
+        const parsed = JSON.parse(raw) as Partial<AppData>;
+        setData({ ...emptyData(), ...parsed });
+      } else setData(sampleData());
     } catch {
       setData(sampleData());
     }
