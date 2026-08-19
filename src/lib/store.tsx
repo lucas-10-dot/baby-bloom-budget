@@ -9,10 +9,12 @@ import {
 } from "react";
 import type {
   AppData,
+  BoxDeposit,
   Expense,
   Goal,
   LayetteItem,
   PurchaseAnalysis,
+  SavingsBox,
 } from "./types";
 import { emptyData, sampleData } from "./sample-data";
 
@@ -33,6 +35,12 @@ interface StoreValue {
   updateLayetteItem: (id: string, patch: Partial<LayetteItem>) => void;
   removeLayetteItem: (id: string) => void;
   addAnalysis: (a: Omit<PurchaseAnalysis, "id" | "createdAt">) => void;
+  addBox: (b: Omit<SavingsBox, "id" | "createdAt" | "milestonesSeen">) => string;
+  updateBox: (id: string, patch: Partial<SavingsBox>) => void;
+  removeBox: (id: string) => void;
+  addDeposit: (d: Omit<BoxDeposit, "id" | "createdAt">) => void;
+  removeDeposit: (id: string) => void;
+  markMilestone: (boxId: string, milestone: number) => void;
   loadSample: () => void;
   clearAll: () => void;
 }
