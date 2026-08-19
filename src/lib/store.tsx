@@ -9,10 +9,12 @@ import {
 } from "react";
 import type {
   AppData,
+  BoxDeposit,
   Expense,
   Goal,
   LayetteItem,
   PurchaseAnalysis,
+  SavingsBox,
 } from "./types";
 import { emptyData, sampleData } from "./sample-data";
 
@@ -33,6 +35,12 @@ interface StoreValue {
   updateLayetteItem: (id: string, patch: Partial<LayetteItem>) => void;
   removeLayetteItem: (id: string) => void;
   addAnalysis: (a: Omit<PurchaseAnalysis, "id" | "createdAt">) => void;
+  addBox: (b: Omit<SavingsBox, "id" | "createdAt" | "milestonesSeen">) => string;
+  updateBox: (id: string, patch: Partial<SavingsBox>) => void;
+  removeBox: (id: string) => void;
+  addDeposit: (d: Omit<BoxDeposit, "id" | "createdAt">) => void;
+  removeDeposit: (id: string) => void;
+  markMilestone: (boxId: string, milestone: number) => void;
   loadSample: () => void;
   clearAll: () => void;
 }
@@ -46,8 +54,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) setData(JSON.parse(raw) as AppData);
-      else setData(sampleData());
+      if (raw) {
+        const parsed = JSON.parse(raw) as Partial<AppData>;
+        setData({ ...emptyData(), ...parsed });
+      } else setData(sampleData());
     } catch {
       setData(sampleData());
     }
@@ -140,6 +150,51 @@ export function StoreProvider({ children }: { children: ReactNode }) {
             { ...a, id: newId(), createdAt: new Date().toISOString() },
             ...d.analyses,
           ].slice(0, 10),
+        })),
+      addBox: (b) => {
+        const id = newId();
+        update((d) => ({
+          ...d,
+          isSample: false,
+          boxes: [
+            ...d.boxes,
+            { ...b, id, createdAt: new Date().toISOString(), milestonesSeen: [] },
+          ],
+        }));
+        return id;
+      },
+      updateBox: (id, patch) =>
+        update((d) => ({
+          ...d,
+          boxes: d.boxes.map((b) => (b.id === id ? { ...b, ...patch } : b)),
+        })),
+      removeBox: (id) =>
+        update((d) => ({
+          ...d,
+          boxes: d.boxes.filter((b) => b.id !== id),
+          deposits: d.deposits.filter((dep) => dep.boxId !== id),
+        })),
+      addDeposit: (dep) =>
+        update((d) => ({
+          ...d,
+          deposits: [
+            { ...dep, id: newId(), createdAt: new Date().toISOString() },
+            ...d.deposits,
+          ],
+        })),
+      removeDeposit: (id) =>
+        update((d) => ({
+          ...d,
+          deposits: d.deposits.filter((dep) => dep.id !== id),
+        })),
+      markMilestone: (boxId, milestone) =>
+        update((d) => ({
+          ...d,
+          boxes: d.boxes.map((b) =>
+            b.id === boxId && !b.milestonesSeen.includes(milestone)
+              ? { ...b, milestonesSeen: [...b.milestonesSeen, milestone] }
+              : b,
+          ),
         })),
       loadSample: () => setData(sampleData()),
       clearAll: () => setData(emptyData()),
