@@ -149,6 +149,51 @@ export function StoreProvider({ children }: { children: ReactNode }) {
             ...d.analyses,
           ].slice(0, 10),
         })),
+      addBox: (b) => {
+        const id = newId();
+        update((d) => ({
+          ...d,
+          isSample: false,
+          boxes: [
+            ...d.boxes,
+            { ...b, id, createdAt: new Date().toISOString(), milestonesSeen: [] },
+          ],
+        }));
+        return id;
+      },
+      updateBox: (id, patch) =>
+        update((d) => ({
+          ...d,
+          boxes: d.boxes.map((b) => (b.id === id ? { ...b, ...patch } : b)),
+        })),
+      removeBox: (id) =>
+        update((d) => ({
+          ...d,
+          boxes: d.boxes.filter((b) => b.id !== id),
+          deposits: d.deposits.filter((dep) => dep.boxId !== id),
+        })),
+      addDeposit: (dep) =>
+        update((d) => ({
+          ...d,
+          deposits: [
+            { ...dep, id: newId(), createdAt: new Date().toISOString() },
+            ...d.deposits,
+          ],
+        })),
+      removeDeposit: (id) =>
+        update((d) => ({
+          ...d,
+          deposits: d.deposits.filter((dep) => dep.id !== id),
+        })),
+      markMilestone: (boxId, milestone) =>
+        update((d) => ({
+          ...d,
+          boxes: d.boxes.map((b) =>
+            b.id === boxId && !b.milestonesSeen.includes(milestone)
+              ? { ...b, milestonesSeen: [...b.milestonesSeen, milestone] }
+              : b,
+          ),
+        })),
       loadSample: () => setData(sampleData()),
       clearAll: () => setData(emptyData()),
     }),
