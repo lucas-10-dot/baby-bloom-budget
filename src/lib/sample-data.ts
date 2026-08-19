@@ -11,6 +11,16 @@ const dueDate = () => {
   return d.toISOString().slice(0, 10);
 };
 
+const futureDate = (months: number) => {
+  const d = new Date();
+  d.setMonth(d.getMonth() + months);
+  return d.toISOString().slice(0, 10);
+};
+
+const boxA = id();
+const boxB = id();
+const boxC = id();
+
 export const emptyData = (): AppData => ({
   isSample: false,
   baby: { id: id() },
@@ -88,5 +98,43 @@ export const sampleData = (): AppData => {
       { id: id(), name: "Mamadeira", category: "Alimentação", priority: "importante", quantity: 3, estimatedPrice: 40, purchased: false, createdAt: new Date().toISOString() },
     ],
     analyses: [],
+    boxes: [
+      {
+        id: boxA,
+        childName: "Lucas",
+        objective: "futuro_bebe",
+        initialAmount: 1000,
+        target: 5000,
+        monthlyContribution: 150,
+        targetDate: futureDate(30),
+        createdAt: new Date().toISOString(),
+        milestonesSeen: [25],
+      },
+      {
+        id: boxB,
+        childName: "Lucas",
+        objective: "educacao",
+        initialAmount: 500,
+        target: 10000,
+        monthlyContribution: 200,
+        targetDate: futureDate(60),
+        createdAt: new Date().toISOString(),
+        milestonesSeen: [],
+      },
+      {
+        id: boxC,
+        childName: "Família",
+        objective: "emergencias",
+        initialAmount: 800,
+        target: 3000,
+        monthlyContribution: 100,
+        createdAt: new Date().toISOString(),
+        milestonesSeen: [25],
+      },
+    ],
+    deposits: [
+      { id: id(), boxId: boxA, amount: 150, date: day(cur, 5), note: "Economia do mês", createdAt: new Date().toISOString() },
+      { id: id(), boxId: boxA, amount: 100, date: day(prev, 18), note: "Economia do mês", createdAt: new Date().toISOString() },
+    ],
   };
 };
