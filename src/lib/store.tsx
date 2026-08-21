@@ -153,13 +153,29 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         })),
       addBox: (b) => {
         const id = newId();
+        const createdAt = new Date().toISOString();
+        const initialAmount = Math.max(0, b.initialAmount || 0);
         update((d) => ({
           ...d,
           isSample: false,
           boxes: [
             ...d.boxes,
-            { ...b, id, createdAt: new Date().toISOString(), milestonesSeen: [] },
+            { ...b, id, createdAt, initialAmount, milestonesSeen: [] },
           ],
+          deposits:
+            initialAmount > 0
+              ? [
+                  {
+                    id: newId(),
+                    boxId: id,
+                    amount: initialAmount,
+                    date: createdAt.slice(0, 10),
+                    note: "Valor inicial",
+                    createdAt,
+                  },
+                  ...d.deposits,
+                ]
+              : d.deposits,
         }));
         return id;
       },
@@ -177,6 +193,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       addDeposit: (dep) =>
         update((d) => ({
           ...d,
+          isSample: false,
           deposits: [
             { ...dep, id: newId(), createdAt: new Date().toISOString() },
             ...d.deposits,
