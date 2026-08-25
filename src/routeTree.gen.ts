@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AntesDeComprarRouteImport } from './routes/antes-de-comprar'
+import { Route as CaixinhaRouteImport } from './routes/caixinha'
 import { Route as EnxovalRouteImport } from './routes/enxoval'
 import { Route as GastosRouteImport } from './routes/gastos'
 import { Route as MetasRouteImport } from './routes/metas'
@@ -24,6 +25,11 @@ const IndexRoute = IndexRouteImport.update({
 const AntesDeComprarRoute = AntesDeComprarRouteImport.update({
   id: '/antes-de-comprar',
   path: '/antes-de-comprar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CaixinhaRoute = CaixinhaRouteImport.update({
+  id: '/caixinha',
+  path: '/caixinha',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnxovalRoute = EnxovalRouteImport.update({
@@ -50,6 +56,7 @@ const PlanejamentoRoute = PlanejamentoRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/antes-de-comprar': typeof AntesDeComprarRoute
+  '/caixinha': typeof CaixinhaRoute
   '/enxoval': typeof EnxovalRoute
   '/gastos': typeof GastosRoute
   '/metas': typeof MetasRoute
@@ -58,6 +65,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/antes-de-comprar': typeof AntesDeComprarRoute
+  '/caixinha': typeof CaixinhaRoute
   '/enxoval': typeof EnxovalRoute
   '/gastos': typeof GastosRoute
   '/metas': typeof MetasRoute
@@ -67,6 +75,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/antes-de-comprar': typeof AntesDeComprarRoute
+  '/caixinha': typeof CaixinhaRoute
   '/enxoval': typeof EnxovalRoute
   '/gastos': typeof GastosRoute
   '/metas': typeof MetasRoute
@@ -77,6 +86,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/antes-de-comprar'
+    | '/caixinha'
     | '/enxoval'
     | '/gastos'
     | '/metas'
@@ -85,6 +95,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/antes-de-comprar'
+    | '/caixinha'
     | '/enxoval'
     | '/gastos'
     | '/metas'
@@ -93,6 +104,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/antes-de-comprar'
+    | '/caixinha'
     | '/enxoval'
     | '/gastos'
     | '/metas'
@@ -102,6 +114,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AntesDeComprarRoute: typeof AntesDeComprarRoute
+  CaixinhaRoute: typeof CaixinhaRoute
   EnxovalRoute: typeof EnxovalRoute
   GastosRoute: typeof GastosRoute
   MetasRoute: typeof MetasRoute
@@ -122,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/antes-de-comprar'
       fullPath: '/antes-de-comprar'
       preLoaderRoute: typeof AntesDeComprarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/caixinha': {
+      id: '/caixinha'
+      path: '/caixinha'
+      fullPath: '/caixinha'
+      preLoaderRoute: typeof CaixinhaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/enxoval': {
@@ -158,6 +178,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AntesDeComprarRoute: AntesDeComprarRoute,
+  CaixinhaRoute: CaixinhaRoute,
   EnxovalRoute: EnxovalRoute,
   GastosRoute: GastosRoute,
   MetasRoute: MetasRoute,
