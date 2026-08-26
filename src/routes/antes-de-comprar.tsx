@@ -1,3 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState, type FormEvent } from "react";
 import { Search, CheckCircle2, AlertTriangle, XCircle, ExternalLink, PiggyBank, Sparkles, Store, ArrowRight, TrendingDown } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
@@ -30,7 +31,7 @@ const verdictStyles = {
 } as const;
 
 function AntesDeComprar() {
-  const { data, addAnalysis } = useStore();
+  const { data, addAnalysis, addDeposit } = useStore();
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState<ExpenseCategory>("Outros");
@@ -40,6 +41,7 @@ function AntesDeComprar() {
   const [yourPrice, setYourPrice] = useState("");
   const [bestPrice, setBestPrice] = useState("");
   const [savingMessage, setSavingMessage] = useState("");
+  const [savedBoxId, setSavedBoxId] = useState<string | null>(null);
 
   const normalizedName = useMemo(() => normalizeProductQuery(name), [name]);
   const economy = Math.max(0, Number(yourPrice) - Number(bestPrice));
@@ -70,34 +72,33 @@ function AntesDeComprar() {
   }
 
   function addToBox(boxId: string) {
-    if (!economy) return;
+    if (!economy || savedBoxId) return;
     const box = boxes.find((item) => item.id === boxId);
     if (!box) return;
-    // O valor é registrado como economia confirmada pelo usuário; o app não movimenta dinheiro real.
-    useStore;
-    setSavingMessage(`${brl(economy)} será registrado na Caixinha de ${box.childName}. Abra a Caixinha do Futuro para conferir o histórico.`);
+    addDeposit({
+      boxId,
+      amount: economy,
+      date: new Date().toISOString().slice(0, 10),
+      note: `Economia na compra de ${normalizedName || "produto"}`,
+    });
+    setSavedBoxId(boxId);
+    setSavingMessage(`${brl(economy)} foi registrado na Caixinha de ${box.childName}. ❤️`);
   }
 
   return (
     <AppShell title="Antes de comprar" subtitle="Pesquise, compare e pense antes de gastar.">
       <section className="card-premium p-5 sm:p-6">
-        <div className="mb-5 flex items-start gap-3">
-          <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary"><Search className="size-5" /></div>
-          <div><h2 className="font-display text-xl font-semibold">Encontre o melhor preço</h2><p className="mt-1 text-sm leading-relaxed text-muted-foreground">Digite o produto e abra a pesquisa nas principais lojas. Os preços mostrados pelas lojas são reais e atualizados por elas.</p></div>
-        </div>
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <Input className="h-12 rounded-2xl" placeholder="Ex.: carrinho de bebê, fralda tamanho M" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => e.key === "Enter" && searchOffers()} />
-          <Button type="button" onClick={searchOffers} disabled={!normalizedName} size="lg" className="h-12 rounded-2xl sm:px-7"><Search className="mr-2 size-4" /> Pesquisar</Button>
-        </div>
+        <div className="mb-5 flex items-start gap-3"><div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary"><Search className="size-5" /></div><div><h2 className="font-display text-xl font-semibold">Encontre o melhor preço</h2><p className="mt-1 text-sm leading-relaxed text-muted-foreground">Digite o produto e abra a pesquisa nas principais lojas. Os preços mostrados pelas lojas são reais e atualizados por elas.</p></div></div>
+        <div className="flex flex-col gap-3 sm:flex-row"><Input className="h-12 rounded-2xl" placeholder="Ex.: carrinho de bebê, fralda tamanho M" value={name} onChange={(e) => setName(e.target.value)} onKeyDown={(e) => e.key === "Enter" && searchOffers()} /><Button type="button" onClick={searchOffers} disabled={!normalizedName} size="lg" className="h-12 rounded-2xl sm:px-7"><Search className="mr-2 size-4" /> Pesquisar</Button></div>
         {searched && <div className="mt-5 rounded-3xl bg-muted/60 p-4 sm:p-5"><div className="flex items-start gap-3"><Store className="mt-0.5 size-5 shrink-0 text-primary" /><div><p className="font-semibold">Pesquisando por “{normalizedName}”</p><p className="mt-1 text-sm text-muted-foreground">Abra as lojas abaixo para conferir as ofertas atuais. Esta etapa não inventa preços nem links.</p></div></div><div className="mt-4 grid gap-3 sm:grid-cols-2">{storeSearches.map((store) => <a key={store.name} href={store.buildUrl(normalizedName)} target="_blank" rel="noreferrer" className="group flex items-center justify-between gap-3 rounded-2xl border border-border bg-card p-4 transition-colors hover:bg-muted"><div><p className="font-semibold text-foreground">{store.name}</p><p className="mt-1 text-xs text-muted-foreground">{store.description}</p></div><ExternalLink className="size-4 shrink-0 text-muted-foreground group-hover:text-primary" /></a>)}</div></div>}
       </section>
 
       <section className="card-premium mt-6 p-5 sm:p-6">
         <div className="mb-5 flex items-start gap-3"><div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-success-soft text-success"><TrendingDown className="size-5" /></div><div><h2 className="font-display text-xl font-semibold">Quanto você conseguiu economizar?</h2><p className="mt-1 text-sm text-muted-foreground">Compare o preço que você encontrou com o melhor preço que viu nas lojas.</p></div></div>
         <div className="grid gap-4 sm:grid-cols-2"><div className="flex flex-col gap-2"><Label htmlFor="preco-encontrado">Preço que você encontrou</Label><MoneyInput id="preco-encontrado" value={yourPrice} onChange={setYourPrice} /></div><div className="flex flex-col gap-2"><Label htmlFor="melhor-preco">Melhor preço encontrado</Label><MoneyInput id="melhor-preco" value={bestPrice} onChange={setBestPrice} /></div></div>
-        {economy > 0 && <div className="mt-5 rounded-3xl bg-success-soft p-5"><p className="text-sm text-muted-foreground">Economia encontrada</p><p className="mt-1 text-3xl font-bold text-success">{brl(economy)}</p><p className="mt-1 text-sm text-muted-foreground">Esse dinheiro pode virar uma pequena reserva para seu filho.</p><Button size="lg" className="mt-4 h-12 rounded-2xl" onClick={saveSavings}><PiggyBank className="mr-2 size-5" /> Guardar essa economia</Button></div>}
+        {economy > 0 && <div className="mt-5 rounded-3xl bg-success-soft p-5"><p className="text-sm text-muted-foreground">Economia encontrada</p><p className="mt-1 text-3xl font-bold text-success">{brl(economy)}</p><p className="mt-1 text-sm text-muted-foreground">Esse dinheiro pode virar uma pequena reserva para seu filho.</p><Button size="lg" className="mt-4 h-12 rounded-2xl" onClick={saveSavings} disabled={!!savedBoxId}><PiggyBank className="mr-2 size-5" /> {savedBoxId ? "Economia registrada" : "Guardar essa economia"}</Button></div>}
         {savingMessage && <p className="mt-4 rounded-2xl bg-primary-soft px-4 py-3 text-sm text-primary">{savingMessage}</p>}
-        {economy > 0 && boxes.length > 0 && <div className="mt-4 grid gap-2 sm:grid-cols-2">{boxes.map((box) => <Button key={box.id} variant="outline" className="h-auto justify-between rounded-2xl px-4 py-3 text-left" onClick={() => addToBox(box.id)}><span>Caixinha de {box.childName}</span><ArrowRight className="size-4" /></Button>)}</div>}
+        {economy > 0 && boxes.length > 0 && !savedBoxId && <div className="mt-4 grid gap-2 sm:grid-cols-2">{boxes.map((box) => <Button key={box.id} variant="outline" className="h-auto justify-between rounded-2xl px-4 py-3 text-left" onClick={() => addToBox(box.id)}><span>Caixinha de {box.childName}</span><ArrowRight className="size-4" /></Button>)}</div>}
       </section>
 
       <form onSubmit={analyze} className="card-premium mt-6 p-5 sm:p-6">
