@@ -38,7 +38,7 @@
   --primary: oklch(0.56 0.22 295); --primary-foreground: oklch(0.99 0.005 285);
   --primary-soft: oklch(0.955 0.045 295); --primary-glow: oklch(0.68 0.18 310);
   --secondary: oklch(0.975 0.012 285); --secondary-foreground: oklch(0.28 0.05 280);
-  --muted: oklch(0.965 0.01 285); --muted-foreground: oklch(0.48 0.025 275);
+  --muted: oklch(0.965 0.01 285); --muted-foreground: oklch(0.44 0.025 275);
   --accent: oklch(0.96 0.05 80); --accent-foreground: oklch(0.32 0.06 65);
   --destructive: oklch(0.61 0.2 25); --destructive-foreground: oklch(0.99 0.005 285);
   --success: oklch(0.57 0.15 155); --success-foreground: oklch(0.99 0.005 285); --success-soft: oklch(0.95 0.05 155);
@@ -54,15 +54,23 @@
   --shadow-soft: 0 2px 10px oklch(0.35 0.04 285 / .06), 0 10px 26px oklch(0.35 0.04 285 / .07);
   --shadow-lift: 0 14px 34px -22px oklch(0.45 0.16 295 / .35);
   --shadow-premium: 0 1px 0 white inset, 0 8px 26px -16px oklch(0.4 0.08 285 / .22), 0 24px 55px -38px oklch(0.45 0.15 295 / .25);
-  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 @layer base {
   * { border-color: var(--color-border); }
-  html { background: var(--color-background); }
-  body { background: var(--color-background); color: var(--color-foreground); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
-  h1,h2,h3 { font-family: var(--font-display); letter-spacing: -0.025em; }
+  html { background: var(--color-background); font-size: 16px; }
+  body { background: var(--color-background); color: var(--color-foreground); font-family: var(--font-sans); font-size: 15px; line-height: 1.55; font-weight: 400; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+  h1,h2,h3 { font-family: var(--font-display); color: var(--color-foreground); letter-spacing: -0.02em; line-height: 1.2; font-weight: 700; }
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.25rem; }
+  h3 { font-size: 1rem; }
+  p { line-height: 1.55; }
+  button, input, textarea, select { font-family: var(--font-sans); }
+  button { font-weight: 600; letter-spacing: -0.005em; }
+  input, textarea, select { font-size: 0.9375rem; line-height: 1.4; }
+  small { font-size: 0.75rem; line-height: 1.45; }
 }
 
 @utility card-soft { border-radius: var(--radius-3xl); background: var(--color-card); border: 1px solid var(--color-border); box-shadow: var(--shadow-soft); }
