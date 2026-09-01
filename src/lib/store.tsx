@@ -31,7 +31,9 @@ const newId = () => Math.random().toString(36).slice(2, 10);
 interface StoreValue {
   data: AppData;
   hydrated: boolean;
+  cloud: CloudState;
   update: (fn: (d: AppData) => AppData) => void;
+
   addExpense: (e: Omit<Expense, "id" | "createdAt">) => void;
   removeExpense: (id: string) => void;
   addGoal: (g: Omit<Goal, "id" | "createdAt">) => void;
