@@ -288,7 +288,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       loadSample: () => setData(sampleData()),
       clearAll: () => setData(emptyData()),
     }),
-    [data, hydrated, update],
+    [data, hydrated, cloud, update],
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
