@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -17,10 +18,15 @@ import type {
   SavingsBox,
 } from "./types";
 import { emptyData, sampleData } from "./sample-data";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "./auth";
 
 const STORAGE_KEY = "ninho-financeiro:v1";
 
+export type CloudState = "local" | "loading" | "synced" | "erro";
+
 const newId = () => Math.random().toString(36).slice(2, 10);
+
 
 interface StoreValue {
   data: AppData;
