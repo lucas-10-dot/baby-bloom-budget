@@ -58,6 +58,11 @@ const StoreContext = createContext<StoreValue | null>(null);
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState<AppData>(() => emptyData());
   const [hydrated, setHydrated] = useState(false);
+  const [cloud, setCloud] = useState<CloudState>("local");
+  const { user } = useAuth();
+  const dataRef = useRef(data);
+  const syncedUserRef = useRef<string | null>(null);
+  dataRef.current = data;
 
   useEffect(() => {
     try {
@@ -81,9 +86,65 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }
   }, [data, hydrated]);
 
+  // Carrega os dados da conta na nuvem (ou envia os dados locais na primeira vez).
+  const userId = user?.id ?? null;
+  useEffect(() => {
+    if (!hydrated) return;
+    if (!userId) {
+      syncedUserRef.current = null;
+      setCloud("local");
+      return;
+    }
+    let cancelled = false;
+    setCloud("loading");
+    (async () => {
+      const { data: row, error } = await supabase
+        .from("family_data")
+        .select("data")
+        .eq("user_id", userId)
+        .maybeSingle();
+      if (cancelled) return;
+      if (error) {
+        setCloud("erro");
+        return;
+      }
+      const remote = row?.data as Partial<AppData> | undefined;
+      if (remote && Array.isArray(remote.goals)) {
+        setData({ ...emptyData(), ...remote });
+      } else {
+        const local = dataRef.current;
+        const seed = local.isSample ? emptyData() : local;
+        setData(seed);
+        await supabase
+          .from("family_data")
+          .upsert({ user_id: userId, data: seed as never }, { onConflict: "user_id" });
+      }
+      if (cancelled) return;
+      syncedUserRef.current = userId;
+      setCloud("synced");
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [userId, hydrated]);
+
+  // Salva alterações na nuvem (com pequeno atraso para agrupar edições).
+  useEffect(() => {
+    if (!userId || syncedUserRef.current !== userId) return;
+    const timer = window.setTimeout(async () => {
+      const { error } = await supabase
+        .from("family_data")
+        .upsert({ user_id: userId, data: data as never }, { onConflict: "user_id" });
+      setCloud(error ? "erro" : "synced");
+    }, 600);
+    return () => window.clearTimeout(timer);
+  }, [data, userId]);
+
   const update = useCallback((fn: (d: AppData) => AppData) => {
     setData((prev) => ({ ...fn(prev) }));
   }, []);
+
+
 
   const value = useMemo<StoreValue>(
     () => ({
