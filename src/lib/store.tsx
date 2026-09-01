@@ -150,7 +150,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     () => ({
       data,
       hydrated,
-      update,
+      cloud,
+
       addExpense: (e) =>
         update((d) => ({
           ...d,
