@@ -11,6 +11,8 @@ import {
   PiggyBank,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { AccountButton } from "@/components/AccountButton";
+
 
 const nav = [
   { to: "/", label: "Início", short: "Início", icon: Home },
