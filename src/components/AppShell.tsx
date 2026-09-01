@@ -11,6 +11,8 @@ import {
   PiggyBank,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { AccountButton } from "@/components/AccountButton";
+
 
 const nav = [
   { to: "/", label: "Início", short: "Início", icon: Home },
@@ -83,8 +85,12 @@ export function AppShell({
               <h1 className="mt-1 font-display text-[26px] leading-tight font-semibold tracking-tight text-foreground sm:text-4xl">{title}</h1>
               {subtitle ? <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">{subtitle}</p> : null}
             </div>
-            <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-lift)] lg:hidden"><Baby className="size-5" /></span>
+            <div className="flex shrink-0 items-center gap-2">
+              <AccountButton />
+              <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[image:var(--gradient-primary)] text-primary-foreground shadow-[var(--shadow-lift)] lg:hidden"><Baby className="size-5" /></span>
+            </div>
           </div>
+
         </header>
 
         <main className="mx-auto max-w-5xl px-5 pt-8 pb-28 sm:px-8 lg:pb-16">{children}</main>

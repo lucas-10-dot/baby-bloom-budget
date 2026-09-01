@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AntesDeComprarRouteImport } from './routes/antes-de-comprar'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CaixinhaRouteImport } from './routes/caixinha'
 import { Route as EnxovalRouteImport } from './routes/enxoval'
 import { Route as GastosRouteImport } from './routes/gastos'
@@ -25,6 +26,11 @@ const IndexRoute = IndexRouteImport.update({
 const AntesDeComprarRoute = AntesDeComprarRouteImport.update({
   id: '/antes-de-comprar',
   path: '/antes-de-comprar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CaixinhaRoute = CaixinhaRouteImport.update({
@@ -56,6 +62,7 @@ const PlanejamentoRoute = PlanejamentoRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/antes-de-comprar': typeof AntesDeComprarRoute
+  '/auth': typeof AuthRoute
   '/caixinha': typeof CaixinhaRoute
   '/enxoval': typeof EnxovalRoute
   '/gastos': typeof GastosRoute
@@ -65,6 +72,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/antes-de-comprar': typeof AntesDeComprarRoute
+  '/auth': typeof AuthRoute
   '/caixinha': typeof CaixinhaRoute
   '/enxoval': typeof EnxovalRoute
   '/gastos': typeof GastosRoute
@@ -75,6 +83,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/antes-de-comprar': typeof AntesDeComprarRoute
+  '/auth': typeof AuthRoute
   '/caixinha': typeof CaixinhaRoute
   '/enxoval': typeof EnxovalRoute
   '/gastos': typeof GastosRoute
@@ -86,6 +95,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/antes-de-comprar'
+    | '/auth'
     | '/caixinha'
     | '/enxoval'
     | '/gastos'
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/antes-de-comprar'
+    | '/auth'
     | '/caixinha'
     | '/enxoval'
     | '/gastos'
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/antes-de-comprar'
+    | '/auth'
     | '/caixinha'
     | '/enxoval'
     | '/gastos'
@@ -114,6 +126,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AntesDeComprarRoute: typeof AntesDeComprarRoute
+  AuthRoute: typeof AuthRoute
   CaixinhaRoute: typeof CaixinhaRoute
   EnxovalRoute: typeof EnxovalRoute
   GastosRoute: typeof GastosRoute
@@ -135,6 +148,13 @@ declare module '@tanstack/react-router' {
       path: '/antes-de-comprar'
       fullPath: '/antes-de-comprar'
       preLoaderRoute: typeof AntesDeComprarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/caixinha': {
@@ -178,6 +198,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AntesDeComprarRoute: AntesDeComprarRoute,
+  AuthRoute: AuthRoute,
   CaixinhaRoute: CaixinhaRoute,
   EnxovalRoute: EnxovalRoute,
   GastosRoute: GastosRoute,
