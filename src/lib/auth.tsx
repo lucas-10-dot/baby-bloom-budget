@@ -34,6 +34,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       loading,
       signOut: async () => {
         await supabase.auth.signOut();
+        try {
+          window.localStorage.removeItem("ninho-financeiro:v1");
+        } catch {
+          /* ignora falha de armazenamento */
+        }
       },
     }),
     [session, loading],
