@@ -1,8 +1,9 @@
-import { Link, useRouterState } from "@tanstack/react-router";
-import type { ReactNode } from "react";
-import { Home, ShoppingCart, PiggyBank, Smile, Menu, Bell, Receipt, Baby } from "lucide-react";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useEffect, type ReactNode } from "react";
+import { Home, ShoppingCart, PiggyBank, Smile, Menu, Bell, Receipt, Baby, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AccountButton } from "@/components/AccountButton";
+import { useAuth } from "@/lib/auth";
 
 const nav = [
   { to: "/", label: "Início", short: "Início", icon: Home },
