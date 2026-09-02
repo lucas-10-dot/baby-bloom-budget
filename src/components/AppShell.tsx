@@ -15,7 +15,22 @@ const nav = [
 
 export function AppShell({ title, subtitle, children }: { title: string; subtitle?: string; children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
   const isActive = (to: string) => to === "/" ? pathname === "/" : pathname.startsWith(to);
+
+  useEffect(() => {
+    if (!loading && !user) navigate({ to: "/auth", replace: true });
+  }, [loading, user, navigate]);
+
+  if (loading || !user) {
+    return (
+      <div className="grid min-h-screen place-items-center bg-background text-muted-foreground">
+        <Loader2 className="size-6 animate-spin" />
+      </div>
+    );
+  }
+
   return <div className="min-h-screen bg-background text-foreground">
     <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col border-r border-border bg-white px-5 py-7 lg:flex">
       <Link to="/" className="flex items-center gap-2 px-2"><span className="grid size-10 place-items-center rounded-2xl bg-primary-soft text-primary"><Baby className="size-6" /></span><span className="font-display text-[23px] font-bold text-primary">MamaWise</span></Link>
