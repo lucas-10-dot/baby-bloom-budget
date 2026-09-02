@@ -33,6 +33,7 @@ export interface BabyProfile {
 export interface FinancialProfile {
   id: string;
   monthlySaving: number; // quanto consegue guardar por mês
+  monthlyIncome?: number; // renda mensal da família
   currentReserve: number; // já reservado para o bebê
   layetteBudget: number; // orçamento do enxoval
   goalAmount: number; // meta principal para o bebê
