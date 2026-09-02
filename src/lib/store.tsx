@@ -91,6 +91,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!hydrated) return;
     if (!userId) {
+      // Saiu da conta: limpa tudo para não exibir dados da sessão anterior.
+      if (syncedUserRef.current) setData(emptyData());
       syncedUserRef.current = null;
       setCloud("local");
       return;
