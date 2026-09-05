@@ -73,3 +73,26 @@
 @utility card-premium { position: relative; border-radius: var(--radius-3xl); border: 1px solid color-mix(in oklab, var(--color-border) 85%, transparent); background: linear-gradient(155deg, white, color-mix(in oklab, var(--color-primary-soft) 24%, white)); box-shadow: var(--shadow-premium); }
 @utility hover-lift { transition: box-shadow 200ms ease, transform 200ms ease; &:hover { transform: translateY(-2px); box-shadow: var(--shadow-lift), var(--shadow-premium); } }
 @utility text-gradient-gold { background-image: var(--gradient-gold); background-clip: text; color: transparent; }
+
+/* Linguagem visual consistente entre as telas */
+.mw-page { animation: mw-page-in 240ms ease-out; }
+.mw-card { border: 1px solid color-mix(in oklab, var(--color-border) 82%, white); border-radius: 1.25rem; background: white; box-shadow: 0 8px 26px oklch(0.35 0.04 285 / .055); }
+.mw-card-interactive { transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease; }
+.mw-card-interactive:hover { transform: translateY(-1px); box-shadow: 0 14px 34px oklch(0.35 0.04 285 / .09); }
+.mw-section-title { font-size: .78rem; font-weight: 750; letter-spacing: -.01em; color: var(--color-foreground); }
+.mw-section-subtitle { margin-top: .2rem; font-size: .68rem; line-height: 1.5; color: var(--color-muted-foreground); }
+.mw-label { font-size: .67rem; font-weight: 650; color: var(--color-muted-foreground); }
+.mw-value { font-size: 1.15rem; line-height: 1.15; font-weight: 750; letter-spacing: -.025em; }
+.mw-pill { display: inline-flex; align-items: center; gap: .35rem; border-radius: 999px; padding: .35rem .62rem; font-size: .63rem; font-weight: 700; }
+.mw-button { min-height: 2.65rem; border-radius: .9rem; font-size: .72rem; font-weight: 700; box-shadow: 0 6px 16px oklch(0.45 0.15 295 / .14); transition: transform 160ms ease, box-shadow 160ms ease; }
+.mw-button:active { transform: scale(.98); }
+
+@keyframes mw-page-in { from { opacity: .88; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 1023px) {
+  body { font-size: 14px; }
+}
+
+@media (min-width: 1024px) {
+  .mw-desktop-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(280px, .85fr); gap: 1rem; align-items: start; }
+}
