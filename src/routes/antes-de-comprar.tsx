@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useStore } from "@/lib/store";
 import { brl } from "@/lib/finance";
 import { storeSearches } from "@/lib/ofertas";
+import heroAsset from "@/assets/antes-de-comprar-hero.jpg.asset.json";
 
 export const Route = createFileRoute("/antes-de-comprar")({ head: () => ({ meta: [{ title: "Antes de Comprar — MamaWise" }] }), component: Comprar });
 
