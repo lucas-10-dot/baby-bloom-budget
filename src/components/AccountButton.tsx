@@ -38,7 +38,7 @@ export function AccountButton() {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="hidden items-center gap-1.5 rounded-full bg-card/70 px-3 py-1.5 text-[11px] font-medium text-muted-foreground sm:flex">
+      <span className="hidden items-center gap-1.5 rounded-full bg-card/70 px-3 py-1.5 text-[12px] font-medium text-muted-foreground sm:flex">
         {status}
       </span>
       <Button
