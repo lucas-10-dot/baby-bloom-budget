@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useStore } from "@/lib/store";
 import { brl } from "@/lib/finance";
 import { storeSearches } from "@/lib/ofertas";
+import heroAsset from "@/assets/antes-de-comprar-hero.jpg.asset.json";
 
 export const Route = createFileRoute("/antes-de-comprar")({ head: () => ({ meta: [{ title: "Antes de Comprar — MamaWise" }] }), component: Comprar });
 
@@ -33,10 +34,18 @@ function Comprar() {
 function SearchScreen({ query, setQuery, onSearch }: { query: string; setQuery: (v: string) => void; onSearch: () => void }) {
   const suggestions = ["Fralda Pampers M", "Leite Nan 800g", "Carrinho de bebê", "Cadeira infantil", "Lenço umedecido", "Shampoo infantil"];
   return <div className="space-y-3">
-    <section className="rounded-[28px] border border-[#ebe5f5] bg-white p-5 shadow-[0_8px_28px_rgba(45,30,70,.05)]">
-      <div className="flex items-start justify-between gap-3"><div><p className="text-[9px] font-bold uppercase tracking-[.1em] text-primary">Economize antes de comprar</p><h2 className="mt-2 text-[20px] font-bold leading-tight">Encontre a melhor oferta para você.</h2></div><span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-[#f3edff] text-primary"><Search className="size-5" /></span></div>
-      <p className="mt-4 text-[10px] text-muted-foreground">Compare preço, frete, quantidade e custo por unidade em um só lugar.</p>
-      <div className="relative mt-4"><Input value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => e.key === "Enter" && onSearch()} placeholder="Ex.: fralda Pampers M" className="h-12 rounded-2xl bg-[#faf9fc] pr-12 text-[11px]"/><button onClick={onSearch} className="absolute right-1.5 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-xl bg-primary text-primary-foreground"><Search className="size-4" /></button></div>
+    <section className="overflow-hidden rounded-[28px] border border-[#ebe5f5] bg-white p-5 shadow-[0_8px_28px_rgba(45,30,70,.05)]">
+      <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:gap-5">
+        <div className="shrink-0 rounded-3xl bg-gradient-to-br from-[#f3edff] to-[#efe8f9] p-3 shadow-inner">
+          <img src={heroAsset.url} alt="Mãe e bebê fazendo compras" className="mx-auto block h-32 w-auto rounded-2xl object-cover sm:h-36 lg:h-40" />
+        </div>
+        <div className="flex-1 text-center sm:text-left">
+          <p className="text-[9px] font-bold uppercase tracking-[.1em] text-primary">Economize antes de comprar</p>
+          <h2 className="mt-2 text-[20px] font-bold leading-tight">Encontre a melhor oferta para você.</h2>
+          <p className="mt-2 text-[10px] text-muted-foreground">Compare preço, frete, quantidade e custo por unidade em um só lugar.</p>
+        </div>
+      </div>
+      <div className="relative mt-5"><Input value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => e.key === "Enter" && onSearch()} placeholder="Ex.: fralda Pampers M" className="h-12 rounded-2xl bg-[#faf9fc] pr-12 text-[11px]"/><button onClick={onSearch} className="absolute right-1.5 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-xl bg-primary text-primary-foreground"><Search className="size-4" /></button></div>
       <div className="mt-5 flex items-center gap-1.5"><Sparkles className="size-3.5 text-[#e3a323]"/><p className="text-[9px] font-bold">Sugestões populares</p></div>
       <div className="mt-2 grid grid-cols-2 gap-2">{suggestions.map(s => <button key={s} onClick={() => setQuery(s)} className="rounded-xl border border-border bg-[#fbfafc] px-3 py-2.5 text-left text-[9px] font-medium transition hover:border-primary/30 hover:bg-[#f7f2ff]">{s}</button>)}</div>
     </section>
