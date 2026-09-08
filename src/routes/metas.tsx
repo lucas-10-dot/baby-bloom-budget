@@ -125,15 +125,15 @@ function Metas() {
 
                   <dl className="mt-4 grid grid-cols-3 gap-3 text-center">
                     <div className="rounded-2xl bg-muted/60 px-2 py-3">
-                      <dt className="text-[11px] text-muted-foreground">Meta</dt>
+                      <dt className="text-[12px] text-muted-foreground">Meta</dt>
                       <dd className="mt-1 text-sm font-semibold text-foreground">{brl(goal.target)}</dd>
                     </div>
                     <div className="rounded-2xl bg-success-soft px-2 py-3">
-                      <dt className="text-[11px] text-muted-foreground">Guardado</dt>
+                      <dt className="text-[12px] text-muted-foreground">Guardado</dt>
                       <dd className="mt-1 text-sm font-semibold text-foreground">{brl(goal.saved)}</dd>
                     </div>
                     <div className="rounded-2xl bg-warning-soft px-2 py-3">
-                      <dt className="text-[11px] text-muted-foreground">Falta</dt>
+                      <dt className="text-[12px] text-muted-foreground">Falta</dt>
                       <dd className="mt-1 text-sm font-semibold text-foreground">{brl(remaining)}</dd>
                     </div>
                   </dl>

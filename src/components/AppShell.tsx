@@ -37,7 +37,7 @@ export function AppShell({ title, subtitle, children }: { title: string; subtitl
         {nav.map((item) => <Link key={item.to} to={item.to} className={cn("flex items-center gap-3 rounded-2xl px-4 py-3 text-[13px] font-semibold transition-colors", isActive(item.to) ? "bg-primary-soft text-primary" : "text-muted-foreground hover:bg-muted") }><item.icon className="size-[19px]" />{item.label}</Link>)}
         <Link to="/gastos" className={cn("flex items-center gap-3 rounded-2xl px-4 py-3 text-[13px] font-semibold transition-colors", isActive("/gastos") ? "bg-primary-soft text-primary" : "text-muted-foreground hover:bg-muted")}><Receipt className="size-[19px]" />Meu Orçamento</Link>
       </nav>
-      <div className="mt-auto rounded-3xl bg-primary-soft p-4 text-[11px] leading-[1.6] text-primary">Cuide do seu dinheiro hoje para construir um futuro mais tranquilo para seu filho. 💜</div>
+      <div className="mt-auto rounded-3xl bg-primary-soft p-4 text-[12px] leading-[1.6] text-primary">Cuide do seu dinheiro hoje para construir um futuro mais tranquilo para seu filho. 💜</div>
     </aside>
 
     <div className="lg:pl-[268px]">
@@ -45,7 +45,7 @@ export function AppShell({ title, subtitle, children }: { title: string; subtitl
         <div className="mx-auto max-w-6xl px-4 pb-3 pt-3 sm:px-6 lg:px-10 lg:py-7">
           <div className="flex items-center justify-between lg:hidden">
             <Link to="/" className="flex items-center gap-2"><span className="grid size-9 place-items-center rounded-xl bg-primary-soft text-primary"><Baby className="size-5" /></span><span className="font-display text-[21px] font-bold tracking-[-.04em] text-primary">MamaWise</span></Link>
-            <div className="flex items-center gap-1"><button aria-label="Notificações" className="relative grid size-10 place-items-center rounded-xl"><Bell className="size-5" /><span className="absolute right-1 top-0 grid size-4 place-items-center rounded-full bg-destructive text-[9px] font-bold text-white">3</span></button><AccountButton /></div>
+            <div className="flex items-center gap-1"><button aria-label="Notificações" className="relative grid size-10 place-items-center rounded-xl"><Bell className="size-5" /><span className="absolute right-1 top-0 grid size-4 place-items-center rounded-full bg-destructive text-[12px] font-bold text-white">3</span></button><AccountButton /></div>
           </div>
           <div className="hidden lg:flex lg:items-center lg:justify-between"><div><h1 className="font-display text-[30px] font-bold tracking-[-.04em]">{title}</h1>{subtitle && <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>}</div><AccountButton /></div>
           {pathname !== "/" && <div className="relative mt-3 flex items-center justify-center lg:hidden"><Link to="/" className="absolute left-0 grid size-8 place-items-center rounded-full bg-muted text-lg leading-none" aria-label="Voltar">‹</Link><h1 className="text-[14px] font-bold tracking-[-.02em]">{title}</h1></div>}
@@ -54,6 +54,6 @@ export function AppShell({ title, subtitle, children }: { title: string; subtitl
       <main className="mw-page mx-auto max-w-6xl px-4 pb-28 pt-2 sm:px-6 lg:px-10 lg:pb-12 lg:pt-0">{children}</main>
     </div>
 
-    <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-white/95 shadow-[0_-8px_25px_rgba(40,20,70,.06)] backdrop-blur-xl lg:hidden"><div className="mx-auto grid max-w-md grid-cols-5 px-2 py-1.5">{nav.map((item) => <Link key={item.to} to={item.to} className={cn("flex min-h-14 flex-col items-center justify-center gap-1 text-[9px] font-semibold transition-colors", isActive(item.to) ? "text-primary" : "text-muted-foreground")}><span className={cn("grid size-8 place-items-center rounded-xl transition-colors", isActive(item.to) && "bg-primary-soft")}><item.icon className="size-[18px]" /></span>{item.short}</Link>)}</div></nav>
+    <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-white/95 shadow-[0_-8px_25px_rgba(40,20,70,.06)] backdrop-blur-xl lg:hidden"><div className="mx-auto grid max-w-md grid-cols-5 px-2 py-1.5">{nav.map((item) => <Link key={item.to} to={item.to} className={cn("flex min-h-14 flex-col items-center justify-center gap-1 text-[12px] font-semibold transition-colors", isActive(item.to) ? "text-primary" : "text-muted-foreground")}><span className={cn("grid size-8 place-items-center rounded-xl transition-colors", isActive(item.to) && "bg-primary-soft")}><item.icon className="size-[18px]" /></span>{item.short}</Link>)}</div></nav>
   </div>;
 }
