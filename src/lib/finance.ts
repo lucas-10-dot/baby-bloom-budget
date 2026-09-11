@@ -3,6 +3,7 @@ import type {
   AppData,
   Expense,
   Goal,
+  Income,
   LayetteItem,
 } from "./types";
 
@@ -46,6 +47,19 @@ export function monthsUntil(dateIso?: string): number | null {
 export function sumExpensesByMonth(expenses: Expense[], key: string) {
   return expenses
     .filter((e) => monthKey(e.date) === key)
+    .reduce((acc, e) => acc + e.amount, 0);
+}
+
+export function sumIncomesByMonth(incomes: Income[], key: string) {
+  return incomes
+    .filter((i) => monthKey(i.date) === key)
+    .reduce((acc, i) => acc + i.amount, 0);
+}
+
+/** Gastos do mês marcados como do filho. */
+export function sumChildExpensesByMonth(expenses: Expense[], key: string) {
+  return expenses
+    .filter((e) => monthKey(e.date) === key && e.forChild)
     .reduce((acc, e) => acc + e.amount, 0);
 }
 
