@@ -137,6 +137,7 @@ export interface AppData {
   financial: FinancialProfile;
   goals: Goal[];
   expenses: Expense[];
+  incomes: Income[];
   layette: LayetteItem[];
   analyses: PurchaseAnalysis[];
   boxes: SavingsBox[];
