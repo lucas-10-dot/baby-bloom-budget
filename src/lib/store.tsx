@@ -13,6 +13,7 @@ import type {
   BoxDeposit,
   Expense,
   Goal,
+  Income,
   LayetteItem,
   PurchaseAnalysis,
   SavingsBox,
@@ -35,7 +36,11 @@ interface StoreValue {
   update: (fn: (d: AppData) => AppData) => void;
 
   addExpense: (e: Omit<Expense, "id" | "createdAt">) => void;
+  updateExpense: (id: string, patch: Partial<Expense>) => void;
   removeExpense: (id: string) => void;
+  addIncome: (i: Omit<Income, "id" | "createdAt">) => void;
+  removeIncome: (id: string) => void;
+  setMonthlyIncome: (value: number) => void;
   addGoal: (g: Omit<Goal, "id" | "createdAt">) => void;
   updateGoal: (id: string, patch: Partial<Goal>) => void;
   removeGoal: (id: string) => void;
@@ -168,6 +173,50 @@ export function StoreProvider({ children }: { children: ReactNode }) {
             ...d.financial,
             availableBalance: d.financial.availableBalance - e.amount,
           },
+        })),
+      updateExpense: (id, patch) =>
+        update((d) => {
+          const target = d.expenses.find((e) => e.id === id);
+          const delta = patch.amount !== undefined && target ? patch.amount - target.amount : 0;
+          return {
+            ...d,
+            expenses: d.expenses.map((e) => (e.id === id ? { ...e, ...patch } : e)),
+            financial: {
+              ...d.financial,
+              availableBalance: d.financial.availableBalance - delta,
+            },
+          };
+        }),
+      addIncome: (i) =>
+        update((d) => ({
+          ...d,
+          isSample: false,
+          incomes: [
+            { ...i, id: newId(), createdAt: new Date().toISOString() },
+            ...(d.incomes ?? []),
+          ],
+          financial: {
+            ...d.financial,
+            availableBalance: d.financial.availableBalance + i.amount,
+          },
+        })),
+      removeIncome: (id) =>
+        update((d) => {
+          const target = (d.incomes ?? []).find((i) => i.id === id);
+          return {
+            ...d,
+            incomes: (d.incomes ?? []).filter((i) => i.id !== id),
+            financial: {
+              ...d.financial,
+              availableBalance: d.financial.availableBalance - (target?.amount ?? 0),
+            },
+          };
+        }),
+      setMonthlyIncome: (value) =>
+        update((d) => ({
+          ...d,
+          isSample: false,
+          financial: { ...d.financial, monthlyIncome: Math.max(0, value) },
         })),
       removeExpense: (id) =>
         update((d) => {
