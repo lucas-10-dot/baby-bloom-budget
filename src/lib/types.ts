@@ -55,7 +55,19 @@ export interface Expense {
   date: string; // ISO date
   description: string;
   category: ExpenseCategory;
+  forChild?: boolean; // gasto relacionado ao filho
   note?: string;
+  createdAt: string;
+}
+
+export type IncomeSource = "Salário" | "Freelance" | "Benefício" | "Presente" | "Outros";
+
+export interface Income {
+  id: string;
+  amount: number;
+  date: string; // ISO date
+  description: string;
+  source: IncomeSource;
   createdAt: string;
 }
 
@@ -125,6 +137,7 @@ export interface AppData {
   financial: FinancialProfile;
   goals: Goal[];
   expenses: Expense[];
+  incomes: Income[];
   layette: LayetteItem[];
   analyses: PurchaseAnalysis[];
   boxes: SavingsBox[];

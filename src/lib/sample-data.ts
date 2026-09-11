@@ -34,6 +34,7 @@ export const emptyData = (): AppData => ({
   },
   goals: [],
   expenses: [],
+  incomes: [],
   layette: [],
   analyses: [],
   boxes: [],
@@ -49,6 +50,7 @@ export const sampleData = (): AppData => {
     financial: {
       id: id(),
       monthlySaving: 400,
+      monthlyIncome: 5200,
       currentReserve: 2300,
       layetteBudget: 3000,
       goalAmount: 5000,
@@ -86,6 +88,11 @@ export const sampleData = (): AppData => {
       { id: id(), amount: 250, date: day(prev, 6), description: "Cortina do quarto", category: "Quarto", createdAt: new Date().toISOString() },
       { id: id(), amount: 210, date: day(prev, 15), description: "Vitaminas", category: "Saúde", createdAt: new Date().toISOString() },
       { id: id(), amount: 160, date: day(prev, 22), description: "Body kit 5 peças", category: "Roupas", createdAt: new Date().toISOString() },
+    ],
+    incomes: [
+      { id: id(), amount: 4200, date: day(cur, 5), description: "Salário", source: "Salário", createdAt: new Date().toISOString() },
+      { id: id(), amount: 1000, date: day(cur, 20), description: "Freelance", source: "Freelance", createdAt: new Date().toISOString() },
+      { id: id(), amount: 4200, date: day(prev, 5), description: "Salário", source: "Salário", createdAt: new Date().toISOString() },
     ],
     layette: [
       { id: id(), name: "Berço", category: "Quarto", priority: "essencial", quantity: 1, estimatedPrice: 900, purchased: true, paidPrice: 850, createdAt: new Date().toISOString() },
