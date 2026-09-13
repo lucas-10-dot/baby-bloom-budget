@@ -29,7 +29,7 @@ function Dashboard() {
           <h2 className="mt-4 text-[24px] font-bold leading-[1.12] text-[#211a35]">Olá, mamãe! <span>💜</span></h2>
           <p className="mt-2.5 max-w-[280px] text-[12px] leading-[1.55] text-[#625a70]">Vamos cuidar do seu orçamento e construir, um pouquinho por vez, o futuro de {babyName}.</p>
         </div>
-        <img src={familyFinanceHero.url} alt="Família economizando para o futuro" className="absolute bottom-0 right-0 h-[130px] w-auto object-contain drop-shadow-sm sm:-right-2 sm:h-[160px] lg:h-[200px]" />
+        <img src={familyFinanceHero.url} alt="Família economizando para o futuro" className="absolute -right-1 top-1 h-[115px] w-auto object-contain drop-shadow-sm sm:bottom-0 sm:right-0 sm:top-auto sm:h-[160px] lg:h-[200px]" />
         <div className="absolute right-[27%] top-7 text-sm">💗</div><div className="absolute right-[8%] top-20 text-xs">✨</div>
       </section>
 
