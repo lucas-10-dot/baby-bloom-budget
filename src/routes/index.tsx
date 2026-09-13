@@ -3,7 +3,7 @@ import { ChevronRight, PiggyBank, ShoppingCart, Sparkles, TrendingDown, Wallet }
 import { AppShell } from "@/components/AppShell";
 import { Progress } from "@/components/ui/progress";
 import { useStore } from "@/lib/store";
-import { brl, currentMonthKey, sumExpensesByMonth } from "@/lib/finance";
+import { brl, currentMonthKey, lastMonthsKeys, sumExpensesByMonth, sumIncomesByMonth, monthLabel } from "@/lib/finance";
 import { boxStats } from "@/lib/caixinha";
 import familyFinanceHero from "@/assets/family-finance-hero.png.asset.json";
 
@@ -17,9 +17,15 @@ function Dashboard() {
   const box = data.boxes[0];
   const stats = box ? boxStats(box, data.deposits) : null;
   const babyName = box?.childName || data.baby.babyName || "seu filho";
-  const spent = sumExpensesByMonth(data.expenses, currentMonthKey());
+  const currentMonth = currentMonthKey();
+  const spent = sumExpensesByMonth(data.expenses, currentMonth);
   const saved = stats?.savedThisMonth ?? 0;
   const balance = data.financial.availableBalance;
+  const incomes = data.incomes ?? [];
+  const entries = sumIncomesByMonth(incomes, currentMonth) || data.financial.monthlyIncome || 0;
+  const result = entries - spent;
+  const history = lastMonthsKeys(6).map((key) => ({ key, total: sumExpensesByMonth(data.expenses, key) }));
+  const maxSpent = Math.max(...history.map((item) => item.total), 1);
 
   return <AppShell title="Início">
     <div className="space-y-3">
@@ -42,7 +48,27 @@ function Dashboard() {
         <Link to="/assistente" className="group rounded-[24px] border border-[#dfdbf7] bg-gradient-to-br from-[#faf9ff] to-[#f2efff] p-4 transition-all hover:-translate-y-0.5 sm:p-5"><div className="flex items-start gap-3"><span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[#ece7ff] text-xl">🤖</span><div className="min-w-0 flex-1"><div className="flex items-center justify-between"><p className="text-[12px] font-bold text-primary">Assistente MamaWise</p><ChevronRight className="size-4 text-primary" /></div><p className="mt-1.5 text-[12px] leading-relaxed text-[#5c5870]">Uma ajudinha inteligente para suas decisões financeiras.</p><span className="mt-3 inline-flex rounded-xl bg-primary px-3.5 py-2 text-[12px] font-bold text-white shadow-sm">Falar com a IA</span></div></div></Link>
       </div>
 
-      <section className="rounded-[24px] border border-border bg-white p-4 shadow-[0_6px_20px_rgba(35,25,55,.04)] sm:p-5"><div className="flex items-center justify-between"><div><p className="text-[12px] font-semibold uppercase tracking-[.08em] text-muted-foreground">Visão rápida</p><h2 className="mt-1 text-[15px] font-bold">Este mês</h2></div><Link to="/gastos" className="rounded-lg px-2 py-1 text-[12px] font-bold text-primary hover:bg-primary-soft">Ver detalhes</Link></div><div className="mt-4 grid grid-cols-3 divide-x divide-border"><Metric icon={<PiggyBank className="size-4" />} label="Economia" value={brl(saved)} tone="success" /><Metric icon={<TrendingDown className="size-4" />} label="Gastos" value={brl(spent)} tone="danger" /><Metric icon={<Wallet className="size-4" />} label="Saldo" value={brl(balance)} tone="primary" /></div></section>
+      <section className="rounded-[24px] border border-[#e5def1] bg-white p-4 shadow-[0_8px_25px_rgba(35,25,55,.05)] sm:p-5">
+        <div className="flex items-start justify-between gap-3">
+          <div><p className="text-[12px] font-semibold uppercase tracking-[.08em] text-primary">Seu mês</p><h2 className="mt-1 text-[17px] font-bold">Como está seu mês?</h2><p className="mt-0.5 text-[11px] text-muted-foreground">{monthLabel(currentMonth)} · veja rapidamente para onde seu dinheiro está indo.</p></div>
+          <Link to="/gastos" className="inline-flex shrink-0 items-center gap-1 rounded-xl bg-primary-soft px-3 py-2 text-[11px] font-bold text-primary">Meu Orçamento <ChevronRight className="size-3.5" /></Link>
+        </div>
+        <div className="mt-4 grid grid-cols-3 divide-x divide-border rounded-2xl bg-[#faf9fc] py-3">
+          <Metric icon={<TrendingDown className="size-4" />} label="Gastos" value={brl(spent)} tone="danger" />
+          <Metric icon={<PiggyBank className="size-4" />} label="Economia" value={brl(Math.max(result, 0))} tone="success" />
+          <Metric icon={<Wallet className="size-4" />} label="Resultado" value={brl(result)} tone={result < 0 ? "danger" : "primary"} />
+        </div>
+        <div className="mt-4">
+          <div className="flex items-center justify-between"><p className="text-[11px] font-bold">Evolução dos gastos</p><span className="text-[10px] text-muted-foreground">últimos 6 meses</span></div>
+          <div className="mt-3 flex h-20 items-end gap-2 sm:gap-3">
+            {history.map((item) => {
+              const height = item.total > 0 ? Math.max(12, Math.round((item.total / maxSpent) * 64)) : 5;
+              const active = item.key === currentMonth;
+              return <Link key={item.key} to="/gastos" className="group flex h-full flex-1 flex-col items-center justify-end gap-1.5" title={`Ver ${monthLabel(item.key)}`}><span className={`w-full max-w-8 rounded-t-lg transition-all group-hover:opacity-80 ${active ? "bg-primary" : "bg-[#ddd4ee]"}`} style={{ height }} /><span className={`text-[9px] font-semibold ${active ? "text-primary" : "text-muted-foreground"}`}>{monthLabel(item.key)}</span></Link>;
+            })}
+          </div>
+        </div>
+      </section>
 
       <div className="flex items-center gap-3 rounded-2xl bg-[#faf7ff] px-4 py-3"><span className="grid size-9 shrink-0 place-items-center rounded-full bg-primary-soft text-primary"><Sparkles className="size-4" /></span><div><p className="text-[12px] font-bold text-[#322a45]">Continue construindo o futuro de {babyName} 💜</p><p className="mt-0.5 text-[12px] text-muted-foreground">Cada pequena economia conta.</p></div></div>
     </div>
@@ -51,5 +77,5 @@ function Dashboard() {
 
 function Metric({ icon, label, value, tone }: { icon: React.ReactNode; label: string; value: string; tone: "danger" | "primary" | "success" }) {
   const c = tone === "danger" ? "text-destructive" : tone === "success" ? "text-success" : "text-primary";
-  return <div className="px-2 text-center"><div className={`mx-auto grid size-9 place-items-center rounded-xl bg-muted ${c}`}>{icon}</div><p className="mt-1.5 text-[12px] font-medium text-muted-foreground">{label}</p><p className={`mt-0.5 text-[12px] font-bold ${c}`}>{value}</p></div>;
+  return <div className="px-2 text-center"><div className={`mx-auto grid size-9 place-items-center rounded-xl bg-white ${c}`}>{icon}</div><p className="mt-1.5 text-[10px] font-medium text-muted-foreground">{label}</p><p className={`mt-0.5 text-[12px] font-bold ${c}`}>{value}</p></div>;
 }
