@@ -5,6 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { useStore } from "@/lib/store";
 import { brl, currentMonthKey, sumExpensesByMonth } from "@/lib/finance";
 import { boxStats } from "@/lib/caixinha";
+import familyFinanceHero from "@/assets/family-finance-hero.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [{ title: "MamaWise" }, { name: "description", content: "Seu dinheiro, suas compras e o futuro do seu filho em um só lugar." }] }),
@@ -28,7 +29,7 @@ function Dashboard() {
           <h2 className="mt-4 text-[24px] font-bold leading-[1.12] text-[#211a35]">Olá, mamãe! <span>💜</span></h2>
           <p className="mt-2.5 max-w-[280px] text-[12px] leading-[1.55] text-[#625a70]">Vamos cuidar do seu orçamento e construir, um pouquinho por vez, o futuro de {babyName}.</p>
         </div>
-        <div className="absolute -right-2 bottom-[-7px] text-[92px] leading-none drop-shadow-sm">👩🏻‍🍼</div>
+        <img src={familyFinanceHero.url} alt="Família economizando para o futuro" className="absolute -right-3 bottom-0 h-[150px] w-auto object-contain drop-shadow-sm sm:h-[180px] lg:h-[200px]" />
         <div className="absolute right-[27%] top-7 text-sm">💗</div><div className="absolute right-[8%] top-20 text-xs">✨</div>
       </section>
 
