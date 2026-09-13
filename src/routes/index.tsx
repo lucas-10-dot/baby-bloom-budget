@@ -23,13 +23,13 @@ function Dashboard() {
 
   return <AppShell title="Início">
     <div className="space-y-3">
-      <section className="relative min-h-[190px] overflow-hidden rounded-[28px] border border-[#eadff5] bg-gradient-to-br from-[#fffaff] via-[#faf4ff] to-[#f0e5ff] px-5 py-5 shadow-[0_12px_35px_rgba(95,58,150,.08)] sm:px-7">
-        <div className="relative z-10 max-w-[68%] pt-1">
+      <section className="relative min-h-[210px] overflow-hidden rounded-[28px] border border-[#eadff5] bg-gradient-to-br from-[#fffaff] via-[#faf4ff] to-[#f0e5ff] px-5 py-5 shadow-[0_12px_35px_rgba(95,58,150,.08)] sm:min-h-[190px] sm:px-7">
+        <div className="relative z-10 max-w-full pt-1 sm:max-w-[68%]">
           <span className="inline-flex rounded-full bg-white/80 px-3 py-1 text-[12px] font-bold text-primary shadow-sm">Seu momento de hoje ✨</span>
           <h2 className="mt-4 text-[24px] font-bold leading-[1.12] text-[#211a35]">Olá, mamãe! <span>💜</span></h2>
           <p className="mt-2.5 max-w-[280px] text-[12px] leading-[1.55] text-[#625a70]">Vamos cuidar do seu orçamento e construir, um pouquinho por vez, o futuro de {babyName}.</p>
         </div>
-        <img src={familyFinanceHero.url} alt="Família economizando para o futuro" className="absolute -right-2 bottom-0 h-[120px] w-auto object-contain drop-shadow-sm sm:h-[160px] lg:h-[200px]" />
+        <img src={familyFinanceHero.url} alt="Família economizando para o futuro" className="absolute bottom-0 right-0 h-[130px] w-auto object-contain drop-shadow-sm sm:-right-2 sm:h-[160px] lg:h-[200px]" />
         <div className="absolute right-[27%] top-7 text-sm">💗</div><div className="absolute right-[8%] top-20 text-xs">✨</div>
       </section>
 
