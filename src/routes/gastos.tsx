@@ -30,14 +30,19 @@ const colors = ["#6d35e8", "#24b987", "#f49b32", "#ef476f", "#8c8a99"];
 const today = () => new Date().toISOString().slice(0, 10);
 const dayLabel = (iso: string) => iso.split("-").reverse().slice(0, 2).join("/");
 
+function parseKey(key: string): [number, number] {
+  const parts = key.split("-").map(Number);
+  return [parts[0] ?? new Date().getFullYear(), parts[1] ?? 1];
+}
+
 function shiftMonth(key: string, amount: number) {
-  const [year, month] = key.split("-").map(Number);
+  const [year, month] = parseKey(key);
   const date = new Date(year, month - 1 + amount, 1);
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 }
 
 function fullMonthLabel(key: string) {
-  const [year, month] = key.split("-").map(Number);
+  const [year, month] = parseKey(key);
   return new Date(year, month - 1, 1).toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
 }
 
