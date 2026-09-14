@@ -172,6 +172,57 @@ function AuthPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            {mode === "criar" && (
+              <div className="flex flex-col gap-3 rounded-2xl bg-muted/50 p-4">
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex items-center justify-between text-xs font-medium">
+                    <span className="text-muted-foreground">Força da senha</span>
+                    {password && (
+                      <span
+                        className={
+                          strength.score <= 2
+                            ? "text-red-600"
+                            : strength.score <= 3
+                              ? "text-amber-600"
+                              : "text-emerald-600"
+                        }
+                      >
+                        {strength.label}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex gap-1" aria-hidden="true">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <span
+                        key={i}
+                        className={`h-1.5 flex-1 rounded-full transition-colors ${
+                          password && i < strength.score ? strength.bar : "bg-border"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <p className="text-xs font-medium text-muted-foreground">
+                  Sua senha precisa ter:
+                </p>
+                <ul className="flex flex-col gap-1.5">
+                  {passwordRules.map((rule) => {
+                    const ok = rule.test(password);
+                    return (
+                      <li
+                        key={rule.label}
+                        className={`flex items-center gap-2 text-xs transition-colors ${
+                          ok ? "text-emerald-700" : "text-muted-foreground"
+                        }`}
+                      >
+                        {ok ? <Check className="size-3.5" /> : <X className="size-3.5 opacity-40" />}
+                        {rule.label}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
           </div>
           <Button type="submit" size="lg" className="h-12 rounded-2xl text-base" disabled={busy}>
             {busy ? <Loader2 className="size-5 animate-spin" /> : <Mail className="size-5" />}
