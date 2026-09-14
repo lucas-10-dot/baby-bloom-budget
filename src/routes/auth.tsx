@@ -130,8 +130,16 @@ function AuthPage() {
         </section>
 
         <section className="p-6 sm:p-9 lg:p-12">
-          <div className="mb-7 md:hidden">
-            <div className="flex items-center gap-3"><span className="grid size-11 place-items-center rounded-2xl bg-violet-100 text-violet-700"><Baby className="size-5" /></span><span className="text-2xl font-bold text-violet-800">MamaWise</span></div>
+          <div className="mb-7 md:hidden rounded-3xl bg-gradient-to-br from-violet-700 via-purple-700 to-fuchsia-600 p-5 text-white shadow-lg shadow-violet-200/50">
+            <div className="flex items-center gap-3">
+              <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-white/15 ring-1 ring-white/20"><Baby className="size-5" /></span>
+              <span className="text-2xl font-bold tracking-tight">MamaWise</span>
+            </div>
+            <span className="mt-5 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-[11px] font-semibold ring-1 ring-white/15">
+              <Sparkles className="size-3.5" /> Mais tranquilidade para sua família
+            </span>
+            <h2 className="mt-4 text-2xl font-bold leading-tight">Cuide do dinheiro. Planeje o futuro dos seus filhos.</h2>
+            <p className="mt-3 text-xs leading-5 text-white/80">Tenha seu orçamento, sua caixinha e suas decisões de compra organizados em um só lugar.</p>
           </div>
 
           <div className="mb-7">
@@ -152,7 +160,7 @@ function AuthPage() {
               <Label htmlFor="auth-password">Senha</Label>
               <div className="relative">
                 <Input id="auth-password" type={showPassword ? "text" : "password"} required minLength={mode === "criar" ? 8 : 6} autoComplete={mode === "criar" ? "new-password" : "current-password"} placeholder={mode === "criar" ? "Crie uma senha forte" : "Digite sua senha"} className="h-12 rounded-2xl bg-white pr-12" value={password} onChange={(e) => setPassword(e.target.value)} />
-                <button type="button" aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"} onClick={() => setShowPassword((value) => !value)} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-2 text-muted-foreground hover:bg-muted"><>{showPassword ? <EyeOff className="size-5" /> : <Eye className="size-5" />}</></button>
+                <button type="button" aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"} onClick={() => setShowPassword((value) => !value)} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-2 text-muted-foreground hover:bg-muted">{showPassword ? <EyeOff className="size-5" /> : <Eye className="size-5" />}</button>
               </div>
 
               {mode === "criar" && (
