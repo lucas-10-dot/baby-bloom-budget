@@ -42,6 +42,23 @@ function AuthPage() {
     if (!loading && user) navigate({ to: "/", replace: true });
   }, [user, loading, navigate]);
 
+  function friendlyError(error: unknown) {
+    const raw = error instanceof Error ? error.message : String(error);
+    const m = raw.toLowerCase();
+    if (m.includes("failed to fetch") || m.includes("network"))
+      return "Sem conexão com o servidor. Verifique sua internet e tente de novo.";
+    if (m.includes("weak") || m.includes("pwned"))
+      return "Essa senha é muito comum e já apareceu em vazamentos. Escolha uma senha mais forte.";
+    if (m.includes("already registered") || m.includes("user already"))
+      return "Já existe uma conta com esse e-mail. Tente entrar.";
+    if (m.includes("invalid login")) return "E-mail ou senha incorretos.";
+    if (m.includes("email not confirmed"))
+      return "Confirme o e-mail que enviamos antes de entrar.";
+    if (m.includes("rate limit") || m.includes("too many"))
+      return "Muitas tentativas seguidas. Aguarde alguns minutos e tente novamente.";
+    return raw || "Não foi possível continuar.";
+  }
+
   async function submit(e: FormEvent) {
     e.preventDefault();
     if (busy) return;
@@ -61,7 +78,7 @@ function AuthPage() {
         toast.success("Bem-vinda de volta!");
       }
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Não foi possível continuar.");
+      toast.error(friendlyError(error));
     } finally {
       setBusy(false);
     }
