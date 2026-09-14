@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Baby, Loader2, LogIn, Mail } from "lucide-react";
+import { Baby, Check, Loader2, LogIn, Mail, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,6 +29,23 @@ export const Route = createFileRoute("/auth")({
   }),
   component: AuthPage,
 });
+
+const passwordRules: Array<{ label: string; test: (p: string) => boolean }> = [
+  { label: "Pelo menos 8 caracteres", test: (p) => p.length >= 8 },
+  { label: "Uma letra maiúscula", test: (p) => /[A-Z]/.test(p) },
+  { label: "Uma letra minúscula", test: (p) => /[a-z]/.test(p) },
+  { label: "Um número", test: (p) => /\d/.test(p) },
+  { label: "Um símbolo (ex.: ! @ # $)", test: (p) => /[^A-Za-z0-9]/.test(p) },
+];
+
+function passwordStrength(p: string): { score: number; label: string; bar: string } {
+  if (!p) return { score: 0, label: "", bar: "bg-muted" };
+  const met = passwordRules.filter((r) => r.test(p)).length;
+  if (met <= 2) return { score: met, label: "Fraca", bar: "bg-red-500" };
+  if (met <= 3) return { score: met, label: "Média", bar: "bg-amber-500" };
+  if (met <= 4) return { score: met, label: "Boa", bar: "bg-lime-500" };
+  return { score: met, label: "Forte", bar: "bg-emerald-500" };
+}
 
 function AuthPage() {
   const navigate = useNavigate();
