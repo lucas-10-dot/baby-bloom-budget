@@ -78,7 +78,7 @@ function AuthPage() {
         toast.success("Bem-vinda de volta!");
       }
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Não foi possível continuar.");
+      toast.error(friendlyError(error));
     } finally {
       setBusy(false);
     }
