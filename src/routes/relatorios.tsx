@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { BarChart3, Download, FileSpreadsheet, PiggyBank, Wallet, ArrowLeft, CalendarDays } from "lucide-react";
 import { useMemo, useState } from "react";
+import * as XLSX from "xlsx";
 import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { useStore } from "@/lib/store";
@@ -15,15 +16,27 @@ export const Route = createFileRoute("/relatorios")({
   component: Relatorios,
 });
 
-function downloadCsv(filename: string, rows: string[][]) {
-  const csv = rows.map(row => row.map(cell => `"${String(cell ?? "").replace(/"/g, '""')}"`).join(";")).join("\n");
-  const blob = new Blob(["\\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
+function moneyNumber(value: number) {
+  return Number(value.toFixed(2));
+}
+
+function styleSheet(sheet: XLSX.WorkSheet, widths: number[]) {
+  sheet["!cols"] = widths.map(w => ({ wch: w }));
+  const range = XLSX.utils.decode_range(sheet["!ref"] || "A1:A1");
+  for (let c = range.s.c; c <= range.e.c; c++) {
+    const cell = sheet[XLSX.utils.encode_cell({ r: 0, c })];
+    if (cell) cell.s = { font: { bold: true }, fill: { fgColor: { rgb: "EEE7FA" } } };
+  }
+}
+
+function downloadWorkbook(filename: string, sheets: Array<{ name: string; rows: (string | number)[][]; widths: number[] }>) {
+  const workbook = XLSX.utils.book_new();
+  sheets.forEach(({ name, rows, widths }) => {
+    const sheet = XLSX.utils.aoa_to_sheet(rows);
+    styleSheet(sheet, widths);
+    XLSX.utils.book_append_sheet(workbook, sheet, name);
+  });
+  XLSX.writeFile(workbook, filename, { bookType: "xlsx" });
 }
 
 function Relatorios() {
@@ -47,37 +60,72 @@ function Relatorios() {
   }), []);
 
   function exportBudget() {
-    downloadCsv(`mamawise-orcamento-${month}.csv`, [
-      ["MAMAWISE — MEU ORÇAMENTO"],
-      ["Mês", monthLabel(month)], [],
-      ["RESUMO", "VALOR"],
-      ["Entradas", brl(received)],
-      ["Gastos", brl(spent)],
-      ["Resultado", brl(result)],
-      [],
-      ["GASTOS POR CATEGORIA", "VALOR", "PERCENTUAL"],
-      ...cats.map(c => [c.category, brl(c.total), `${Math.round((c.total / Math.max(spent,1))*100)}%`]),
-      [],
-      ["LANÇAMENTOS DE GASTOS", "DATA", "CATEGORIA", "VALOR", "DO FILHO"],
-      ...monthExpenses.map(e => [e.description, e.date, e.category, brl(e.amount), e.forChild ? "Sim" : "Não"]),
-      [],
-      ["LANÇAMENTOS DE ENTRADAS", "DATA", "ORIGEM", "VALOR"],
-      ...monthIncomes.map(i => [i.description, i.date, i.source, brl(i.amount)]),
+    downloadWorkbook(`mamawise-orcamento-${month}.xlsx`, [
+      {
+        name: "Resumo",
+        widths: [28, 20],
+        rows: [
+          ["MAMAWISE — MEU ORÇAMENTO"],
+          ["Período", monthLabel(month)],
+          [],
+          ["Indicador", "Valor (R$)"],
+          ["Entradas", moneyNumber(received)],
+          ["Gastos", moneyNumber(spent)],
+          ["Resultado", moneyNumber(result)],
+        ],
+      },
+      {
+        name: "Categorias",
+        widths: [28, 18, 14],
+        rows: [
+          ["Categoria", "Valor (R$)", "Percentual"],
+          ...cats.map(c => [c.category, moneyNumber(c.total), `${Math.round((c.total / Math.max(spent,1))*100)}%`]),
+        ],
+      },
+      {
+        name: "Gastos",
+        widths: [36, 14, 22, 16, 14],
+        rows: [
+          ["Descrição", "Data", "Categoria", "Valor (R$)", "Do filho"],
+          ...monthExpenses.map(e => [e.description, e.date, e.category, moneyNumber(e.amount), e.forChild ? "Sim" : "Não"]),
+        ],
+      },
+      {
+        name: "Entradas",
+        widths: [36, 14, 24, 16],
+        rows: [
+          ["Descrição", "Data", "Origem", "Valor (R$)"],
+          ...monthIncomes.map(i => [i.description, i.date, i.source, moneyNumber(i.amount)]),
+        ],
+      },
     ]);
   }
 
   function exportBox() {
-    downloadCsv("mamawise-caixinha-do-seu-filho.csv", [
-      ["MAMAWISE — CAIXINHA DO SEU FILHO"],
-      ["Criança", box?.childName ?? "Não criada"],
-      ["Objetivo", box?.objective ?? "—"], [],
-      ["RESUMO", "VALOR"],
-      ["Saldo atual", brl(stats?.current ?? 0)],
-      ["Meta", brl(stats?.target ?? 0)],
-      ["Falta", brl(stats?.remaining ?? 0)],
-      ["Progresso", `${Math.round(stats?.percent ?? 0)}%`], [],
-      ["MOVIMENTAÇÕES", "DATA", "DESCRIÇÃO", "VALOR"],
-      ...deposits.map(d => ["Depósito", d.date, d.note || "Depósito", brl(d.amount)]),
+    downloadWorkbook("mamawise-caixinha-do-seu-filho.xlsx", [
+      {
+        name: "Resumo",
+        widths: [28, 22],
+        rows: [
+          ["MAMAWISE — CAIXINHA DO SEU FILHO"],
+          ["Criança", box?.childName ?? "Não criada"],
+          ["Objetivo", box?.objective ?? "—"],
+          [],
+          ["Indicador", "Valor"],
+          ["Saldo atual (R$)", moneyNumber(stats?.current ?? 0)],
+          ["Meta (R$)", moneyNumber(stats?.target ?? 0)],
+          ["Falta (R$)", moneyNumber(stats?.remaining ?? 0)],
+          ["Progresso", `${Math.round(stats?.percent ?? 0)}%`],
+        ],
+      },
+      {
+        name: "Movimentações",
+        widths: [14, 38, 18],
+        rows: [
+          ["Data", "Descrição", "Valor (R$)"],
+          ...deposits.map(d => [d.date, d.note || "Depósito", moneyNumber(d.amount)]),
+        ],
+      },
     ]);
   }
 
