@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { User, Bell, Shield, Lock, HelpCircle, Star, Share2, LogOut, ChevronRight } from "lucide-react";
+import { User, Bell, Shield, Lock, HelpCircle, Star, Share2, LogOut, ChevronRight, BarChart3 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { useAuth } from "@/lib/auth";
 
@@ -25,6 +25,11 @@ function Mais() {
   return (
     <AppShell title="Mais">
       <section className="rounded-3xl border border-border bg-white p-2 shadow-[0_6px_22px_rgba(60,30,100,.05)]">
+        <Link to="/relatorios" className="flex w-full items-center gap-3 border-b border-border px-3 py-3.5 text-left transition hover:bg-primary-soft">
+          <span className="grid size-8 place-items-center rounded-xl bg-primary-soft text-primary"><BarChart3 className="size-4" /></span>
+          <span className="flex-1"><span className="block text-[12px] font-bold">Relatórios</span><span className="block text-[10px] text-muted-foreground">Números detalhados e planilhas</span></span>
+          <ChevronRight className="size-4 text-muted-foreground" />
+        </Link>
         {items.map(([Icon, label]) => (
           <button key={label} className="flex w-full items-center gap-3 border-b border-border px-3 py-3.5 text-left last:border-0">
             <span className="grid size-8 place-items-center rounded-xl bg-primary-soft text-primary"><Icon className="size-4" /></span>
